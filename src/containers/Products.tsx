@@ -12,7 +12,7 @@ const Products:React.FC<ProductProps>  = ({token, categories}) =>{
     const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(()=>{
-        if (!categories) return
+        if (!categories || !categories.length) return
         const categoryId = categories[0].id 
 
         const init = async () => {

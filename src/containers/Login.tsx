@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { getToken } from "../services/http"
+import Register from './Register'
 
 interface LoginProps {
     setToken: (token: string) => void; 
@@ -8,7 +9,7 @@ interface LoginProps {
 const Login:React.FC<LoginProps> = ({setToken})=>{
     const [username, setUsername]=useState('')
     const [password, setPassword]=useState('')
-
+    const [isRegister, setIsRegister] = useState(false)
 
     const login= async()=>{
         const token = await getToken({username, password})
@@ -16,6 +17,8 @@ const Login:React.FC<LoginProps> = ({setToken})=>{
         setToken(token)
     }
     return(
+    <>
+    {isRegister ? <Register setToken={setToken}/> :
         <div>
             <span>Login</span>
             <br/>
@@ -24,7 +27,10 @@ const Login:React.FC<LoginProps> = ({setToken})=>{
             <input type="password" onChange={(event)=>setPassword(event.target.value)} value={password}/>
             <br/>
             <input type="button" onClick={login} value="Login"/>
+            <input type="button" onClick={()=>setIsRegister(true)} value="Not Registered? Register"/>
         </div>
+    }
+    </>
     )
 }
 

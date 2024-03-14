@@ -51,7 +51,27 @@ const getToken = async (credentials:Credentials)=>{
     const {token} = await response.json()
 
     return token
-
 }
 
-export {getCategories, getProducts, getToken}
+const registerUser = async (credentials:Credentials)=>{
+  const url = `${baseUrl}/accounts/register/`
+  const {username, password} = credentials;
+  const body =  {
+      username: username,
+      password: password
+  }
+
+  const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+
+  const {token} = await response.json()
+
+  return token
+}
+
+export {getCategories, getProducts, getToken, registerUser}
