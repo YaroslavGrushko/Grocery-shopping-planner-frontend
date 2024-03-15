@@ -17,6 +17,7 @@ import Categories from './containers/Categories'
 import {MainContext} from './context/MainContext'
 
 import {GROCERY_SHOPPING_PLANNER_TOKEN} from './consts'
+import { GridRowsProp } from '@mui/x-data-grid';
 
 const theme = createTheme();
 
@@ -31,8 +32,8 @@ theme.typography.h3 = {
 function App() {
   const initToken = localStorage.getItem(GROCERY_SHOPPING_PLANNER_TOKEN) || '';
   const [token, setToken] = useState<string>(initToken)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [currentCategory, setCurrentCategory] = useState(0)
+  const [categories, setCategories] = useState<GridRowsProp>([])
+  const [currentCategory, setCurrentCategory] = useState<Category>({id: 0, name: ''})
 
   const mainContextData = {
     token, 

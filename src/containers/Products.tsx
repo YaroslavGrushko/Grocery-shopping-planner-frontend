@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -60,8 +62,8 @@ function EditToolbar(props: EditToolbarProps) {
 
  const Products = () => {
     const { token, categories, currentCategory, setCurrentCategory } = useMainContext()
-    const [rows, setRows] = React.useState<GridRowsProp>([]);
-    const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+    const [rows, setRows] = useState<GridRowsProp>([]);
+    const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
@@ -104,7 +106,7 @@ function EditToolbar(props: EditToolbarProps) {
             name: rowToUpdate.name,
             quantity: rowToUpdate.quantity,
             price: rowToUpdate.price,
-            category: currentCategory
+            category: currentCategory.id
         }
     if(rowToUpdate.isNew){
         // create product on backend
@@ -177,20 +179,18 @@ function EditToolbar(props: EditToolbarProps) {
   ];
 
   useEffect(() => {
-    if (!categories || !categories.length) return
-    const categoryId = categories[0].id
-    setCurrentCategory(categoryId)
+    if (!currentCategory) return
 
     const init = async () => {
         // setLoading(true)
-        const products:Product[] = await getProducts(categoryId, token)
-        const rows =products as GridRowsProp
+        const products:Product[] = await getProducts(currentCategory.id, token)
+        const rows = products as GridRowsProp
         setRows(rows)
         // setLoading(false)
         }
         init()
     init();
-  }, [categories]);
+  }, [currentCategory]);
 
   useEffect(()=>{
     console.log(rows)
@@ -198,6 +198,7 @@ function EditToolbar(props: EditToolbarProps) {
   },[rows])
 
   return (
+
     <Box
       sx={{
         width: '100%',
@@ -209,6 +210,7 @@ function EditToolbar(props: EditToolbarProps) {
         },
       }}
     >
+      <Typography variant="h3" style={{marginBottom: "20px"}}>{currentCategory?.name}</Typography>
       <DataGrid
         rows={rows}
         columns={columns}
