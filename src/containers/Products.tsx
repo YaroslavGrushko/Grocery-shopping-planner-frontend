@@ -21,9 +21,13 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
+import {
+    randomId,
+  } from '@mui/x-data-grid-generator';
+
 import {useMainContext} from '../context/MainContext'
-import { getProducts } from '../services/http';
-import { Product } from '../types';
+import { deleteProduct, getProducts, postProduct, putProduct } from '../services/http';
+import { Product, PostProduct } from '../types';
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -36,13 +40,9 @@ function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
-    // TODO: 
-    function getRandomInt(max: number) {
-        return Math.floor(Math.random() * max);
-      }
-
-    const id = getRandomInt(100);
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    const id = randomId();
+    console.log(id)
+    setRows((oldRows) => [...oldRows, { id: id, name: '', age: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -52,18 +52,16 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Add product
       </Button>
     </GridToolbarContainer>
   );
 }
 
  const Products = () => {
-    const { token, categories } = useMainContext()
-  const [rows, setRows] = React.useState<GridRowsProp>([]);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  );
+    const { token, categories, currentCategory, setCurrentCategory } = useMainContext()
+    const [rows, setRows] = React.useState<GridRowsProp>([]);
+    const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (
     params,
@@ -82,7 +80,8 @@ function EditToolbar(props: EditToolbarProps) {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    await deleteProduct(id as number, token)
     setRows(rows.filter((row) => row.id !== id));
   };
 
@@ -98,9 +97,24 @@ function EditToolbar(props: EditToolbarProps) {
     }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  const processRowUpdate = async (rowToUpdate: GridRowModel) => {
+    let updatedRow ={}
+    const productToUpdate = 
+        {
+            name: rowToUpdate.name,
+            quantity: rowToUpdate.quantity,
+            price: rowToUpdate.price,
+            category: currentCategory
+        }
+    if(rowToUpdate.isNew){
+        // create product on backend
+        updatedRow = await postProduct(productToUpdate, token)
+    }else{
+        // update product on backend
+        updatedRow = await putProduct(productToUpdate, rowToUpdate.id, token)
+    }
+    updatedRow = { ...updatedRow, isNew: false };
+    setRows(rows.map((row) => (row.id === rowToUpdate.id ? updatedRow : row)));
     return updatedRow;
   };
 
@@ -112,8 +126,8 @@ function EditToolbar(props: EditToolbarProps) {
     { field: 'id', headerName: 'ID', flex: 0.1 },
     { field: 'name', headerName: 'Name', editable: true, flex: 0.7 },
     // {field: 'name_input', headerName: 'Name', renderCell: (params: any) => <ProductNameInput params={params}/>},
-    { field: 'quantity', headerName: 'Quantity', flex: 0.1 },
-    { field: 'price', headerName: 'Price', flex: 0.1 },
+    { field: 'quantity', headerName: 'Quantity', editable: true, flex: 0.1 },
+    { field: 'price', headerName: 'Price', editable: true, flex: 0.1 },
     {
       field: 'actions',
       type: 'actions',
@@ -164,7 +178,8 @@ function EditToolbar(props: EditToolbarProps) {
 
   useEffect(() => {
     if (!categories || !categories.length) return
-    const categoryId = categories[0].id 
+    const categoryId = categories[0].id
+    setCurrentCategory(categoryId)
 
     const init = async () => {
         // setLoading(true)
@@ -175,7 +190,12 @@ function EditToolbar(props: EditToolbarProps) {
         }
         init()
     init();
-  }, []);
+  }, [categories]);
+
+  useEffect(()=>{
+    console.log(rows)
+
+  },[rows])
 
   return (
     <Box

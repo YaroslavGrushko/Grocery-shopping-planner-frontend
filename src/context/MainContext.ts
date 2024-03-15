@@ -6,6 +6,8 @@ interface IMainContext{
     setToken: (token: string) => void;
     categories: Category[];
     setCategories: (categories: Category[]) => void;
+    currentCategory: number;
+    setCurrentCategory: (category: number) => void;
 }
 
 const initContextData = {
@@ -13,6 +15,8 @@ const initContextData = {
   setToken: () => {},
   categories: [],
   setCategories: () => {},
+  currentCategory: 0,
+  setCurrentCategory: () => {},
 }
 
 const MainContext = createContext<IMainContext>(initContextData);

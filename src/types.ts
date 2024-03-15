@@ -9,6 +9,14 @@ interface Product{
     quantity: number;
     price: number;
     isNew: boolean;
+    category: Category;
+  }
+
+  interface PostProduct{
+    name: string;
+    quantity: number;
+    price: number;
+    category: number;
   }
 
 interface Credentials{
@@ -16,4 +24,4 @@ interface Credentials{
   password: string;
 }
 
-export type { Category, Product, Credentials };
+export type { Category, Product, PostProduct, Credentials };

@@ -16,6 +16,8 @@ import { Category } from './types'
 import Categories from './containers/Categories'
 import {MainContext} from './context/MainContext'
 
+import {GROCERY_SHOPPING_PLANNER_TOKEN} from './consts'
+
 const theme = createTheme();
 
 theme.typography.h3 = {
@@ -27,18 +29,24 @@ theme.typography.h3 = {
 };
 
 function App() {
-
-  const [token, setToken] = useState<string>('')
+  const initToken = localStorage.getItem(GROCERY_SHOPPING_PLANNER_TOKEN) || '';
+  const [token, setToken] = useState<string>(initToken)
   const [categories, setCategories] = useState<Category[]>([])
+  const [currentCategory, setCurrentCategory] = useState(0)
 
   const mainContextData = {
     token, 
     setToken,
     categories,
     setCategories,
+    currentCategory,
+    setCurrentCategory
 }
 
-
+const logout = () =>{
+  localStorage.setItem(GROCERY_SHOPPING_PLANNER_TOKEN, '');
+  setToken('')
+}
   return (
     <MainContext.Provider value={mainContextData}>
       <ThemeProvider theme={theme}>
@@ -54,7 +62,7 @@ function App() {
             </Grid> 
             
             <Box style={{width:'fitContent'}}>
-              <Button fullWidth={false} variant="outlined" onClick={()=>setToken('')}>{"Logout"}</Button>
+              <Button fullWidth={false} variant="outlined" onClick={logout}>{"Logout"}</Button>
             </Box>
           </Stack>
         :

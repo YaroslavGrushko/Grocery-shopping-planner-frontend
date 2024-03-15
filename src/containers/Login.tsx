@@ -8,6 +8,7 @@ import Register from './Register'
 import { Credentials } from "../types";
 import CredentialsForm from "./CredentialsForm";
 
+import {GROCERY_SHOPPING_PLANNER_TOKEN} from '../consts'
 
 interface LoginProps {
     setToken: (token: string) => void; 
@@ -20,6 +21,7 @@ const Login:React.FC<LoginProps> = ({setToken})=>{
         const token = await getToken(credentials)
         console.log('token: ' + token)
         setToken(token)
+        localStorage.setItem(GROCERY_SHOPPING_PLANNER_TOKEN, token);
     }
 
     return(
