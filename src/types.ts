@@ -8,6 +8,7 @@ interface Product{
     name: string;
     quantity: number;
     price: number;
+    isNew: boolean;
   }
 
 interface Credentials{
