@@ -1,4 +1,4 @@
-import { useState} from 'react'
+import {useState} from 'react'
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -14,6 +14,7 @@ import Products from './containers/Products'
 import Login from './containers/Login'
 import { Category } from './types'
 import Categories from './containers/Categories'
+import {MainContext} from './context/MainContext'
 
 const theme = createTheme();
 
@@ -30,26 +31,36 @@ function App() {
   const [token, setToken] = useState<string>('')
   const [categories, setCategories] = useState<Category[]>([])
 
+  const mainContextData = {
+    token, 
+    setToken,
+    categories,
+    setCategories,
+}
+
+
   return (
-    <ThemeProvider theme={theme}>
-      {token?
-        <Stack style={{width: "100%"}}>
-          <Grid container style={{width: "100%", display: 'flex', gap:"5%"}}>
-            <Grid item xs={12} md={8} style={{paddingBottom: "30px"}}>
-              <Products token={token} categories={categories} />
-            </Grid>
-            <Grid item xs={12} md={3} style={{paddingBottom: "30px"}}>
-              <Categories token={token} categories={categories} setCategories={setCategories}/>
-            </Grid>
-          </Grid> 
-          
-          <Box style={{width:'fitContent'}}>
-            <Button fullWidth={false} variant="outlined" onClick={()=>setToken('')}>{"Logout"}</Button>
-          </Box>
-        </Stack>
-      :
-      <Login setToken={setToken}/>}
-    </ThemeProvider>
+    <MainContext.Provider value={mainContextData}>
+      <ThemeProvider theme={theme}>
+        {token?
+          <Stack style={{width: "100%"}}>
+            <Grid container style={{width: "100%", display: 'flex', gap:"5%"}}>
+              <Grid item xs={12} md={8} style={{paddingBottom: "30px"}}>
+                <Products/>
+              </Grid>
+              <Grid item xs={12} md={3} style={{paddingBottom: "30px"}}>
+                <Categories/>
+              </Grid>
+            </Grid> 
+            
+            <Box style={{width:'fitContent'}}>
+              <Button fullWidth={false} variant="outlined" onClick={()=>setToken('')}>{"Logout"}</Button>
+            </Box>
+          </Stack>
+        :
+        <Login setToken={setToken}/>}
+      </ThemeProvider>
+    </MainContext.Provider>
   )
 }
 

@@ -1,18 +1,15 @@
 import {useState, useEffect} from 'react'
-import {Category, Product} from "../types";
+import {Product} from "../types";
 import { getProducts } from '../services/http';
 
 import Typography from '@mui/material/Typography';
 import { DataGrid } from '@mui/x-data-grid';
 import CircularProgress from '@mui/material/CircularProgress';
+import {useMainContext} from '../context/MainContext'
 
+const Products = () =>{
+    const { token, categories } = useMainContext()
 
-interface ProductProps{
-    token: string;
-    categories: undefined | Category[];
-}
-
-const Products:React.FC<ProductProps>  = ({token, categories}) =>{
     const [products, setProducts] = useState<Product[]>([])
     const [loading, setLoading] = useState<boolean>(false)
 

@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 
-
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from '@mui/material/Typography';
 
-import { Category } from "../types"
 import { getCategories } from "../services/http";
+import {useMainContext} from '../context/MainContext'
 
-interface CategoryProps {
-    token : string;
-    categories: [] | Category[];
-    setCategories: (categories: Category[]) => void;
-}
-const Categories: React.FC<CategoryProps> = ({token, categories, setCategories}) => {
+
+const Categories = () => {
+    const {token, categories, setCategories} = useMainContext()
     const [loading, setLoading] = useState<boolean>(false)
 
     const columns = [
