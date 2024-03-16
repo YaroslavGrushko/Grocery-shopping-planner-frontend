@@ -17,7 +17,6 @@ import Categories from './containers/Categories'
 import {MainContext} from './context/MainContext'
 
 import {GROCERY_SHOPPING_PLANNER_TOKEN} from './consts'
-import { GridRowsProp } from '@mui/x-data-grid';
 
 const theme = createTheme();
 
