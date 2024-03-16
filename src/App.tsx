@@ -32,14 +32,11 @@ theme.typography.h3 = {
 function App() {
   const initToken = localStorage.getItem(GROCERY_SHOPPING_PLANNER_TOKEN) || '';
   const [token, setToken] = useState<string>(initToken)
-  const [categories, setCategories] = useState<GridRowsProp>([])
   const [currentCategory, setCurrentCategory] = useState<Category>({id: 0, name: ''})
 
   const mainContextData = {
     token, 
     setToken,
-    categories,
-    setCategories,
     currentCategory,
     setCurrentCategory
 }

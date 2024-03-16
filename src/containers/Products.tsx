@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -23,13 +24,11 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
-import {
-    randomId,
-  } from '@mui/x-data-grid-generator';
+import {randomId} from '@mui/x-data-grid-generator';
 
 import {useMainContext} from '../context/MainContext'
 import { deleteProduct, getProducts, postProduct, putProduct } from '../services/http';
-import { Product, PostProduct } from '../types';
+import { Product } from '../types';
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -54,14 +53,14 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add product
+        Додати товар
       </Button>
     </GridToolbarContainer>
   );
 }
 
  const Products = () => {
-    const { token, categories, currentCategory, setCurrentCategory } = useMainContext()
+    const { token, currentCategory} = useMainContext()
     const [rows, setRows] = useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
 
@@ -191,11 +190,6 @@ function EditToolbar(props: EditToolbarProps) {
         init()
     init();
   }, [currentCategory]);
-
-  useEffect(()=>{
-    console.log(rows)
-
-  },[rows])
 
   return (
 

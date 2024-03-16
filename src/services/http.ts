@@ -1,4 +1,4 @@
-import {Category, Product, Credentials, PostProduct} from "../types"
+import {Category, Product, Credentials, PostProduct, PostCategory} from "../types"
 
 const baseUrl = 'http://127.0.0.1:8000'
 
@@ -15,6 +15,51 @@ const getCategories = async (token: string)=>{
     const categories:Category[]  = await response.json()
     
     return categories
+}
+
+const postCategory = async (category: PostCategory, token: string) => {
+  const url = `${baseUrl}/api/categories/`
+
+  const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(category)
+    })
+  
+  const createdCategory: Category  = await response.json()
+
+  return createdCategory
+}
+
+const putCategory = async (category: PostCategory, categoryId: number, token: string) => {
+  const url = `${baseUrl}/api/categories/${categoryId}/`
+
+  const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(category)
+    })
+  
+  const updatedCategory: Category  = await response.json()
+
+  return updatedCategory
+}
+
+const deleteCategory = async (categoryId: number, token: string) => {
+  const url = `${baseUrl}/api/categories/${categoryId}/`
+
+  const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+          'Authorization': `Token ${token}`,
+      }
+    })
 }
 
 const getProducts = async (categoryId: number, token: string)=>{
@@ -49,8 +94,8 @@ const postProduct = async (product: PostProduct, token: string) => {
   return createdProduct
 }
 
-const putProduct = async (product: PostProduct, categoryId: number, token: string) => {
-  const url = `${baseUrl}/api/products/${categoryId}/`
+const putProduct = async (product: PostProduct, productId: number, token: string) => {
+  const url = `${baseUrl}/api/products/${productId}/`
 
   const response = await fetch(url, {
       method: 'PUT',
@@ -119,4 +164,14 @@ const registerUser = async (credentials:Credentials)=>{
   return token
 }
 
-export {getCategories, getProducts, postProduct, putProduct, deleteProduct, getToken, registerUser}
+export {
+  getCategories, 
+  postCategory,
+  putCategory,
+  deleteCategory, 
+  getProducts, 
+  postProduct, 
+  putProduct, 
+  deleteProduct, 
+  getToken, 
+  registerUser}

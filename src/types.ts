@@ -3,6 +3,10 @@ interface Category{
   name: string;
 }
 
+interface PostCategory{
+  name: string;
+}
+
 interface Product{
     id: number;
     name: string;
@@ -24,4 +28,4 @@ interface Credentials{
   password: string;
 }
 
-export type { Category, Product, PostProduct, Credentials };
+export type { Category, PostCategory, Product, PostProduct, Credentials };
