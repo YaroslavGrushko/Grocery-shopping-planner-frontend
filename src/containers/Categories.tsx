@@ -13,19 +13,20 @@ import { deleteCategory, getCategories, postCategory, putCategory } from "../ser
 import {useMainContext} from '../context/MainContext'
 
 import TableCRUD from './TableCRUD'
+import { Category } from "../types";
 
 const Categories = () => {
     const {token, setCurrentCategory} = useMainContext()
     const [rows, setRows] = useState<GridRowsProp>([]);
 
-    const handleShowProducts= (params: any) => () => {
+    const handleShowProducts= (params: any) => {
       console.log(params)
       const category = params.row
       setCurrentCategory(category)
     };
 
     const processRowUpdate = async (rowToUpdate: GridRowModel) => {
-      let updatedRow ={}
+      let updatedRow: Category;
       const categoryToUpdate = 
           {
               name: rowToUpdate.name,
@@ -37,10 +38,24 @@ const Categories = () => {
           // update category on backend
           updatedRow = await putCategory(categoryToUpdate, rowToUpdate.id, token)
       }
+  
       updatedRow = { ...updatedRow, isNew: false };
       setRows(rows.map((row) => (row.id === rowToUpdate.id ? updatedRow : row)));
+    
+      handleShowProducts(
+        {
+          row: {
+            id: updatedRow.id,
+            name: updatedRow.name
+          }
+        })
       return updatedRow;
     };
+
+    const onDeleteCategory = async (id: number, token: string)=>{
+      await deleteCategory(id, token)
+      setCurrentCategory(null)
+    }
 
     const innerColumns = [
         {
@@ -55,13 +70,13 @@ const Categories = () => {
                 icon={<Visibility />}
                 label="Показати список"
                 className="textPrimary"
-                onClick={handleShowProducts(params)}
+                onClick={()=>{handleShowProducts(params)}}
                 color="inherit"
               />
             ];
           },
         },
-        {field: 'name', headerName: 'Name', editable: true},
+        {field: 'name', headerName: 'Назва', editable: true, flex: 1},
     ]
 
 
@@ -87,7 +102,8 @@ const Categories = () => {
           rows={rows}
           setRows={setRows}
           useInit={useCategoriesInit}
-          deleteRowBackend={deleteCategory}
+          checkOnCreateRow={() => true}
+          deleteRowBackend={onDeleteCategory}
           processRowUpdate={processRowUpdate}
           innerColumns={innerColumns}
         />)

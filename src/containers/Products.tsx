@@ -13,12 +13,35 @@ import { Product } from '../types';
 
 import TableCRUD from './TableCRUD'
 
+import swal from 'sweetalert2'
+
  const Products = () => {
     const { token, currentCategory} = useMainContext()
     const [rows, setRows] = useState<GridRowsProp>([]);
 
+    
+    const checkOnCreateProduct = () =>{
+      if(!currentCategory){
+        swal.fire({
+          title: "Перед створенням товару, будь ласка, створіть список товарів!",
+          icon: "warning",
+          toast: true,
+          timer: 6000,
+          position: 'center-center',
+          timerProgressBar: true,
+          showConfirmButton: false,
+          input: null,
+      } as any)
+
+        return false
+      }
+      return true
+    }
+
     const processRowUpdate = async (rowToUpdate: GridRowModel) => {
       let updatedRow ={}
+      if (!currentCategory) return
+
       const productToUpdate = 
           {
               name: rowToUpdate.name,
@@ -39,14 +62,17 @@ import TableCRUD from './TableCRUD'
     };
 
     const innerColumns: GridColDef[] = [
-      { field: 'name', headerName: 'Name', editable: true, flex: 0.7 },
-      { field: 'quantity', headerName: 'Quantity', editable: true, flex: 0.1 },
-      { field: 'price', headerName: 'Price', editable: true, flex: 0.1 },
+      { field: 'name', headerName: 'Назва', editable: true, flex: 1 },
+      { field: 'quantity', headerName: 'К-ть', editable: true, width: 10 },
+      { field: 'price', headerName: 'Ціна', editable: true, width: 10 },
     ];
 
     const useProductsInit = ()=>{
       useEffect(() => {
-          if (!currentCategory) return
+          if (!currentCategory) {
+            setRows([])
+            return
+          }
           
           const init = async () => {
               const products:Product[] = await getProducts(currentCategory.id, token)
@@ -61,11 +87,12 @@ import TableCRUD from './TableCRUD'
   return (
 
    <TableCRUD
-      title={currentCategory.name}
+      title={currentCategory?.name || ''}
       addRowTitle="Додати товар"
       rows={rows}
       setRows={setRows}
       useInit={useProductsInit}
+      checkOnCreateRow={checkOnCreateProduct}
       deleteRowBackend={deleteProduct}
       processRowUpdate={processRowUpdate}
       innerColumns={innerColumns}

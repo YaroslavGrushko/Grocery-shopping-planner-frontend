@@ -1,6 +1,7 @@
-interface Category{
+type Category= {
   id: number;
   name: string;
+  isNew: boolean;
 }
 
 interface PostCategory{

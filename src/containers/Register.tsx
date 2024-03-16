@@ -13,7 +13,7 @@ const Register:React.FC<RegisterProps> = ({setToken})=>{
         setToken(token)
     }
     return(
-        <CredentialsForm action={register} title='Registration' buttonTitle='Register'/>
+        <CredentialsForm action={register} title='Реєстрація' buttonTitle='Зареєструватись'/>
     )
 }
 

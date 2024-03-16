@@ -39,7 +39,7 @@ const CredentialsForm: React.FC<CredentialsProps> = ({title, buttonTitle, action
             <br/>
             {/* Username */}
             <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-                <InputLabel htmlFor="login-username">Username</InputLabel>
+                <InputLabel htmlFor="login-username">Логін</InputLabel>
                 <Input
                     id="login-username"
                     type="text"
@@ -50,7 +50,7 @@ const CredentialsForm: React.FC<CredentialsProps> = ({title, buttonTitle, action
             <br/>
             {/* Password */}
             <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-                <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                <InputLabel htmlFor="standard-adornment-password">Пароль</InputLabel>
                 <Input
                     id="standard-adornment-password"
                     type={showPassword ? 'text' : 'password'}

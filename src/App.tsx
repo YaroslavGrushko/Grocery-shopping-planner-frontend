@@ -31,7 +31,7 @@ theme.typography.h3 = {
 function App() {
   const initToken = localStorage.getItem(GROCERY_SHOPPING_PLANNER_TOKEN) || '';
   const [token, setToken] = useState<string>(initToken)
-  const [currentCategory, setCurrentCategory] = useState<Category>({id: 0, name: ''})
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null)
 
   const mainContextData = {
     token, 
@@ -59,7 +59,7 @@ const logout = () =>{
             </Grid> 
             
             <Box style={{width:'fitContent'}}>
-              <Button fullWidth={false} variant="outlined" onClick={logout}>{"Logout"}</Button>
+              <Button fullWidth={false} variant="outlined" onClick={logout}>Вийти</Button>
             </Box>
           </Stack>
         :

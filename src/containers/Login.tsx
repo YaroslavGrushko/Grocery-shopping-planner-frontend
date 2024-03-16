@@ -27,9 +27,9 @@ const Login:React.FC<LoginProps> = ({setToken})=>{
     return(
     <>
         {isRegister ? <Register setToken={setToken}/> :
-            <div style={{display: 'flex', flexDirection: 'column'}}>
-                <CredentialsForm action={login} title='Login' buttonTitle='Login'/>
-                <Button variant="text" onClick={()=>setIsRegister(true)}>Not Registered? Register</Button>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <CredentialsForm action={login} title='Вхід' buttonTitle='Вхід'/>
+                <Button variant="text" onClick={()=>setIsRegister(true)}>Ще не зареєстровані? Зареєструйтесь</Button>
             </div>
         }
     </>

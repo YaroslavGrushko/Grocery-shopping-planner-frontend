@@ -43,6 +43,7 @@ interface TableCRUDProps {
     addRowTitle: string;
     rows: GridRowsProp;
     setRows: (rows: GridRowsProp) => void;
+    checkOnCreateRow: () => boolean;
     useInit: () => void;
     deleteRowBackend: (id: number, token: string) => void;
     processRowUpdate: (rowToUpdate: GridRowModel) => {};
@@ -55,6 +56,7 @@ const TableCRUD = (props: TableCRUDProps) => {
         rows, 
         setRows, 
         useInit, 
+        checkOnCreateRow,
         deleteRowBackend, 
         processRowUpdate,
         innerColumns} = props
@@ -67,6 +69,9 @@ const TableCRUD = (props: TableCRUDProps) => {
         const { setRows, setRowModesModel } = props;
       
         const handleClick = () => {
+          const canBeCreated =  checkOnCreateRow()
+          if (!canBeCreated) return
+          
           const id = randomId();
           console.log(id)
           setRows((oldRows) => [...oldRows, { id: id, name: '', isNew: true }]);
@@ -128,7 +133,7 @@ const TableCRUD = (props: TableCRUDProps) => {
         {
           field: 'actions',
           type: 'actions',
-          headerName: 'Actions',
+          headerName: 'Дія',
           width: 70,
           cellClassName: 'actions',
           getActions: (params: any) => {
@@ -207,6 +212,13 @@ const TableCRUD = (props: TableCRUDProps) => {
             toolbar: { setRows, setRowModesModel },
           }}
           hideFooter={true}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                id: false,
+              },
+            },
+          }}
         />
       </Box>)
 }

@@ -5,14 +5,14 @@ import { GridRowsProp } from "@mui/x-data-grid";
 interface IMainContext{
     token: string;
     setToken: (token: string) => void;
-    currentCategory: Category;
-    setCurrentCategory: (category: Category) => void;
+    currentCategory: Category | null;
+    setCurrentCategory: (category: Category | null) => void;
 }
 
 const initContextData = {
   token: '', 
   setToken: () => {},
-  currentCategory: {id:0, name:""},
+  currentCategory: null,
   setCurrentCategory: () => {},
 }
 
