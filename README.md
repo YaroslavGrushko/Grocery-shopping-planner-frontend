@@ -1,6 +1,10 @@
 
 # Grocery shopping planner frontend - Front end part (React) of [Django Rest Framework CRUD REST API](https://github.com/YaroslavGrushko/grocery-shopping-planner)  
-
+  
+ <p align="center">
+        <img src="https://github.com/YaroslavGrushko/grocery-shopping-planner-frontend/blob/main/CRUD_tables.png?raw=true" style="margin: auto">
+    </p>  
+    
 ## Features:  
 - **React** + Vite
 - TypeScript
