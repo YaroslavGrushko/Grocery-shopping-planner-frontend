@@ -1,53 +1,103 @@
-import {useState, useEffect} from 'react'
-import {Category, Product} from "../types";
-import { getProducts } from '../services/http';
+import { useEffect, useState } from 'react';
 
-interface ProductProps{
-    token: string;
-    categories: undefined | Category[];
+import {
+  GridRowsProp,
+  GridColDef,
+  GridRowModel,
+} from '@mui/x-data-grid';
+
+
+import {useMainContext} from '../context/MainContext'
+import { deleteProduct, getProducts, postProduct, putProduct } from '../services/http';
+import { Product } from '../types';
+
+import TableCRUD from './TableCRUD'
+
+import swal from 'sweetalert2'
+
+ const Products = () => {
+    const { token, currentCategory} = useMainContext()
+    const [rows, setRows] = useState<GridRowsProp>([]);
+
+    
+    const checkOnCreateProduct = () =>{
+      if(!currentCategory){
+        swal.fire({
+          title: "Перед створенням товару, будь ласка, створіть список товарів!",
+          icon: "warning",
+          toast: true,
+          timer: 6000,
+          position: 'center-center',
+          timerProgressBar: true,
+          showConfirmButton: false,
+          input: null,
+      } as any)
+
+        return false
+      }
+      return true
+    }
+
+    const processRowUpdate = async (rowToUpdate: GridRowModel) => {
+      let updatedRow ={}
+      if (!currentCategory) return
+
+      const productToUpdate = 
+          {
+              name: rowToUpdate.name,
+              quantity: rowToUpdate.quantity,
+              price: rowToUpdate.price,
+              category: currentCategory.id
+          }
+      if(rowToUpdate.isNew){
+          // create product on backend
+          updatedRow = await postProduct(productToUpdate, token)
+      }else{
+          // update product on backend
+          updatedRow = await putProduct(productToUpdate, rowToUpdate.id, token)
+      }
+      updatedRow = { ...updatedRow, isNew: false };
+      setRows(rows.map((row) => (row.id === rowToUpdate.id ? updatedRow : row)));
+      return updatedRow;
+    };
+
+    const innerColumns: GridColDef[] = [
+      { field: 'name', headerName: 'Назва', editable: true, flex: 1 },
+      { field: 'quantity', headerName: 'К-ть', editable: true, width: 10 },
+      { field: 'price', headerName: 'Ціна', editable: true, width: 10 },
+    ];
+
+    const useProductsInit = ()=>{
+      useEffect(() => {
+          if (!currentCategory) {
+            setRows([])
+            return
+          }
+          
+          const init = async () => {
+              const products:Product[] = await getProducts(currentCategory.id, token)
+              const rows = products as GridRowsProp
+              setRows(rows)
+            }
+
+              init()
+          }, [currentCategory]);
+  }
+
+  return (
+
+   <TableCRUD
+      title={currentCategory?.name || ''}
+      addRowTitle="Додати товар"
+      rows={rows}
+      setRows={setRows}
+      useInit={useProductsInit}
+      checkOnCreateRow={checkOnCreateProduct}
+      deleteRowBackend={deleteProduct}
+      processRowUpdate={processRowUpdate}
+      innerColumns={innerColumns}
+   />
+  );
 }
 
-const Products:React.FC<ProductProps>  = ({token, categories}) =>{
-    const [products, setProducts] = useState<Product[]>([])
-    const [loading, setLoading] = useState<boolean>(false)
-
-    useEffect(()=>{
-        if (!categories) return
-        const categoryId = categories[0].id 
-
-        const init = async () => {
-        setLoading(true)
-        const products:Product[] = await getProducts(categoryId, token)
-        setProducts(products)
-        setLoading(false)
-        }
-        init()
-        
-    },[categories])
-return ( 
-    loading ? 'loading...' :
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        {products.map((product:Product)=>
-            (<tr key={product.id as any}>
-                <td>{product.id}</td>
-                <td>{product.name}</td>
-                <td>{product.quantity}</td>
-                <td>{product.price}</td>
-                <td></td>
-                </tr>)
-        )}
-        </tbody>
-    </table>)
-}
-
-  export default Products
+export default Products;

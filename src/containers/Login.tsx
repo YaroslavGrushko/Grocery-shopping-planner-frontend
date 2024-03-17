@@ -1,30 +1,38 @@
 import { useState } from "react"
+
+import Button from '@mui/material/Button';
+
+
 import { getToken } from "../services/http"
+import Register from './Register'
+import { Credentials } from "../types";
+import CredentialsForm from "./CredentialsForm";
+
+import {GROCERY_SHOPPING_PLANNER_TOKEN} from '../consts'
 
 interface LoginProps {
     setToken: (token: string) => void; 
 }
 
 const Login:React.FC<LoginProps> = ({setToken})=>{
-    const [username, setUsername]=useState('')
-    const [password, setPassword]=useState('')
+    const [isRegister, setIsRegister] = useState(false)
 
-
-    const login= async()=>{
-        const token = await getToken({username, password})
+    const login= async(credentials: Credentials)=>{
+        const token = await getToken(credentials)
         console.log('token: ' + token)
         setToken(token)
+        localStorage.setItem(GROCERY_SHOPPING_PLANNER_TOKEN, token);
     }
+
     return(
-        <div>
-            <span>Login</span>
-            <br/>
-            <input type="text" onChange={(event)=>setUsername(event.target.value)} value={username}/>
-            <br/>
-            <input type="password" onChange={(event)=>setPassword(event.target.value)} value={password}/>
-            <br/>
-            <input type="button" onClick={login} value="Login"/>
-        </div>
+    <>
+        {isRegister ? <Register setToken={setToken}/> :
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <CredentialsForm action={login} title='Вхід' buttonTitle='Вхід'/>
+                <Button variant="text" onClick={()=>setIsRegister(true)}>Ще не зареєстровані? Зареєструйтесь</Button>
+            </div>
+        }
+    </>
     )
 }
 
