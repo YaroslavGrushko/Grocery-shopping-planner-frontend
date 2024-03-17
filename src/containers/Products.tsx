@@ -67,6 +67,15 @@ import swal from 'sweetalert2'
       { field: 'price', headerName: 'Ціна', editable: true, width: 10 },
     ];
 
+    const CustomFooter = () =>{
+      const prices = rows.map(row=>Number(row.price))
+      const sum = prices.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue
+      },0);
+      
+      return <div style={{ textAlign: 'center', padding: '20px 0', fontSize: '17px'}}>Загалом: <b>{sum}</b></div>
+    }
+
     const useProductsInit = ()=>{
       useEffect(() => {
           if (!currentCategory) {
@@ -96,6 +105,7 @@ import swal from 'sweetalert2'
       deleteRowBackend={deleteProduct}
       processRowUpdate={processRowUpdate}
       innerColumns={innerColumns}
+      CustomFooter={CustomFooter}
    />
   );
 }

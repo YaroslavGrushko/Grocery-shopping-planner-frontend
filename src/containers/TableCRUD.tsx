@@ -48,6 +48,7 @@ interface TableCRUDProps {
     deleteRowBackend: (id: number, token: string) => void;
     processRowUpdate: (rowToUpdate: GridRowModel) => {};
     innerColumns: GridColDef[];
+    CustomFooter: React.JSXElementConstructor<any> | undefined
 }
 
 const TableCRUD = (props: TableCRUDProps) => {
@@ -59,7 +60,8 @@ const TableCRUD = (props: TableCRUDProps) => {
         checkOnCreateRow,
         deleteRowBackend, 
         processRowUpdate,
-        innerColumns} = props
+        innerColumns,
+        CustomFooter} = props
 
     const {token} = useMainContext()
     const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
@@ -207,11 +209,12 @@ const TableCRUD = (props: TableCRUDProps) => {
           processRowUpdate={processRowUpdate}
           slots={{
             toolbar: EditToolbar,
+            footer: CustomFooter
           }}
           slotProps={{
             toolbar: { setRows, setRowModesModel },
           }}
-          hideFooter={true}
+          hideFooter={!CustomFooter}
           initialState={{
             columns: {
               columnVisibilityModel: {
