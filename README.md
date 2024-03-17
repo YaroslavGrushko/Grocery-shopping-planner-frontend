@@ -1,30 +1,19 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Grocery shopping planner frontend - Front end part (React) of [Django Rest Framework CRUD REST API](https://github.com/YaroslavGrushko/grocery-shopping-planner)  
 
-Currently, two official plugins are available:
+## Features:  
+- **React** + Vite
+- TypeScript
+- Material UI
+- Full CRUD Tables (Material UI DataGrid)
+- JWT Token Authorization
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Get Started  
+1. Run [Django backend](https://github.com/YaroslavGrushko/grocery-shopping-planner) part of this project  
+2. Install Node .js  
+3. Clone this repo  
+4. From the root of this project open terminal or cmd and run:  
+  3.1 **npm i**  
+  3.2 **npm run dev**  
+5. Visit [http://localhost:5173](http://localhost:5173) and feel free to register/login/create categories and products!  
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
