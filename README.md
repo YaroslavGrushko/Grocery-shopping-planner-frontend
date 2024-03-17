@@ -17,7 +17,7 @@
 2. Install Node .js  
 3. Clone this repo  
 4. From the root of this project open terminal or cmd and run:  
-  3.1 **npm i**  
-  3.2 **npm run dev**  
+   **npm i**  
+   **npm run dev**  
 5. Visit [http://localhost:5173](http://localhost:5173) and feel free to register/login/create categories and products!  
 
