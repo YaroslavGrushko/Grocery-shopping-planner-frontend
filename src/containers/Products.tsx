@@ -63,8 +63,10 @@ import swal from 'sweetalert2'
 
     const innerColumns: GridColDef[] = [
       { field: 'name', headerName: 'Назва', editable: true, flex: 1 },
-      { field: 'quantity', headerName: 'К-ть', editable: true, width: 10 },
-      { field: 'price', headerName: 'Ціна', editable: true, width: 10 },
+      { field: 'quantity', headerName: 'К-ть', editable: true, width: 70 },
+      { field: 'price', headerName: '₴', editable: true, width: 70,
+
+     },
     ];
 
     const CustomFooter = () =>{
@@ -73,7 +75,7 @@ import swal from 'sweetalert2'
         return accumulator + currentValue
       },0);
       
-      return <div style={{ textAlign: 'center', padding: '20px 0', fontSize: '17px'}}>Загалом: <b>{sum}</b></div>
+      return <div style={{ textAlign: 'center', padding: '20px 0', fontSize: '17px'}}>Загалом: <b>{sum}</b> ₴</div>
     }
 
     const useProductsInit = ()=>{

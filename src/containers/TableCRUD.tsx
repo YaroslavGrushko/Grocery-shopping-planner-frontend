@@ -222,6 +222,19 @@ const TableCRUD = (props: TableCRUDProps) => {
               },
             },
           }}
+          // column headers icons adjustments
+          disableColumnMenu
+          sx={{
+            '.MuiDataGrid-columnHeader':{
+              paddingRight: '5px'
+            },
+            '.MuiDataGrid-columnHeaderTitleContainer':{
+              gap: '4px'
+            },
+            '.MuiDataGrid-columnHeaderTitleContainer .MuiDataGrid-iconButtonContainer button':{
+                padding: '2px'
+            }
+          }}
         />
       </Box>)
 }
